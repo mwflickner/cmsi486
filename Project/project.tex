@@ -1,0 +1,404 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ul}{}
+\usepackage{adjustbox}
+\usepackage{float}
+\usepackage[colorinlistoftodos]{todonotes}
+
+\usepackage{fullpage}
+% A more tightly packed list than the standard
+% \enumerate{itemize} append * after enumeration type
+\usepackage{mdwlist}
+% Multi-page tables + accompanying header and footer comments
+\usepackage{longtable}
+
+% Vertical table headers, not sure what does what. graphicx is
+% multi-purpose and does a lot of other stuff like including images
+\usepackage{array,graphicx}
+\usepackage{booktabs}
+
+% Lossless .png format expected for figures
+\DeclareGraphicsExtensions{.png}
+
+% \verbatiminput command (\begin{verbatim} is standard lib)
+\usepackage{verbatim}
+% Allows for verbatiminput of files AND breaks lines that are too long
+% for the page to fit
+\usepackage{listings}
+
+\newcommand*\rot{\rotatebox{90}}
+
+\begin{document}
+
+\begin{titlepage}
+Databases Project Titlepage
+\end{titlepage}
+
+
+\tableofcontents
+\newpage
+
+\section{Section I}
+Section 1
+
+\section{Section II}
+Section 2
+
+\section{Section III: Description of Enterprise}
+Matthew Flickner wants build an application to help people manage their responsibilities within a group of friends. He wants to use it to make tasks like household chores easier and more convenient while holding each person accountable for their responsibilities. He needs a reliable database to support the application and store application and user data. Matt needs to store user information for login. There is also a need for keeping track of what users are in what groups and whom the users are friends with. He also needs to track what tasks are in what groups and which user is responsible for completing a given task. Tasks can also have deadlines for when they need to be completed by and users can get points for completing tasks. A user gets one point for completing a task if they are the responsible party and 2 points if they volunteer to complete the task. A user can pay 5 points to get out of doing a particular task. Each user has a their own points within a given group. When the task is completed, a new person responsible is assigned or the task is closed.
+\\
+The following is an initial list of questions that the database for Matt’s application will need to answer:
+\begin{itemize}
+\item What groups is user John Smith a member of?
+\item What tasks are in the group “House Stuff”?
+\item Who is the person responsible for completing the task, “Empty the Dishwasher,” in the group, “House Stuff”?
+\item Is the “Wipe off the counters” a one-time task or a repeating task?
+\item How many points does user Logan Couture have allocated for completing the task “Take out the trash”?
+\item Does user Patrick Marleau have less or more points in the task “Take out the trash” than Logan Couture?
+\item Is Marshall Shady a friend of George Clooney?
+\item Who is in the group “Stuff to Do”?
+\item When does task “Clean Sink” in the group “Kitchen” need to be completed by?
+\end{itemize}
+
+\section{Section IV}
+\subsection{Input and Report Forms}
+
+\subsubsection*{User Creation Form}
+\begin{itemize}
+\item First Name
+\item Last Name
+\item Username
+\item Password
+\item Email Address
+\end{itemize}
+
+\subsubsection*{User Login View}
+\begin{itemize}
+\item Username
+\item Password
+\end{itemize}
+
+\subsubsection*{UserGroup Creation Form}
+\begin{itemize}
+\item GroupId
+\item UserId
+\item isGroupAdmin
+\end{itemize}
+
+\subsubsection*{Group Creation View}
+\begin{itemize}
+\item Group Name
+\item Group Members (usernames)
+\end{itemize}
+
+\subsubsection*{Leave Group VIew}
+\begin{itemize}
+\item Group Id
+\item Group Members
+\item User Group
+\end{itemize}
+
+\subsubsection*{Group Deletion View}
+\begin{itemize}
+\item Group Name
+\item Group Members (usernames)
+\item Group Tasks
+\item Group Id
+\end{itemize}
+
+\subsubsection*{Task Creation Form}
+\begin{itemize}
+\item Task Name
+\item Task Members
+\item Group That Task Belongs To
+\item Person Responsible For Completion
+\end{itemize}
+
+\subsubsection*{Task Completion View}
+\begin{itemize}
+\item Task Name
+\item Task Members
+\item Group That Task Belongs To
+\item Person Who Completes Task
+\item	Person Responsible for Next completion
+\item Points For Task
+\end{itemize}
+
+\subsubsection*{Volunteer for Task Completion View}
+\begin{itemize}
+\item Task Name
+\item Task Members
+\item Group That Task Belongs To
+\item Person Responsible For Completion
+\end{itemize}
+
+\subsubsection*{Opt-Out of Task View}
+\begin{itemize}
+\item Task Id
+\item User's Point in Task
+\item New Person Responsible For Completion
+\end{itemize}
+
+
+\subsection{Assumptions}
+\begin{itemize}
+\item Group Members and Task Members are not always the same list of people
+\item Person Responsible For Completion is one person in Task Members
+\item Usernames are unique
+\item Usernames contain must be between 4-16 characters and be composed only of letters and numbers
+\item Only one account is allowed per email address
+\item Passwords must be at least 6 characters
+\item 1 Point is awarded for the completion of the task when the user is the Person Responsible For Completion
+\item 2 Points are awarded for the completion of the task when the user volunteers to be the Person Responsible For Completion.
+\end{itemize}
+
+\subsection{User-oriented data dictionary}
+\begin{table}[H]
+\centering
+\begin{tabular}{| l | l |}
+Datum & Information Definition \\\hline
+
+user\_id & The unique id given to a user\\
+username & The unique identifier of a user\\
+first\_name & The first name of the user\\
+last\_name & The last name of the user\\
+password & The password of the user\\
+email & The email address of the user\\
+
+user\_group\_id & The unique id given to a user within a group\\
+is\_group\_admin & Boolean that tells whether a user is a admin of their group\\
+
+group\_id & The unique id given to a user\\
+group\_name & The name of a group\\
+
+task\_id & The unique id of a given task\\
+task\_name & The name of the task\\
+
+user\_group\_task\_id & The unique id of a user in a group for a particular task.\\
+points & The number of points a user has for a given task within a group.\\
+is\_desi & Boolean that tells whether or not a person is responsible for a given task\\
+
+
+friendship\_id & The unique id of a friendship between two users\\
+
+
+\end{tabular}
+\end{table}
+
+\subsection*{Cross-reference table}
+
+\begin{longtable}{|l|l|l|l|l|l|l|l|l|l|l|}
+
+\hline
+\multicolumn{1}{|c|}{Datum} &
+\multicolumn{10}{c|}{Form or Screen} \\[1ex]
+
+\hline
+&   % empty label block
+\rot{User Creation Form} &
+\rot{User Login View} &
+\rot{Group Creation View} &
+\rot{Leave Group View} &
+\rot{Group Deletion View} &
+\rot{Task Creation Form} &
+\rot{Task Completion View} &
+\rot{Volunteer for Task Completion View} &
+\rot{Opt-Out of Task View} &
+\rot{Add Friend Form} \\
+\hline
+
+user\_id               & x  & x  &   & x  &   &   &  &  &  & x  \\ \hline
+username            & x  & x  &  x &   &   &   &  &  &   &   \\ \hline
+first\_name          &  x &   &   &   &   &   &   &   &   &   \\ \hline
+last\_name           &  x &   &   &   &   &   &  & x &   &   \\ \hline
+password             &  x & x  &   &   &   &   &  &  &   &   \\ \hline
+email\_address    &  x &  x &   &   &   &   &   &  &   &   \\ \hline
+
+group\_id              &   &   & x  & x  & x  &   &   &   &   &   \\ \hline
+group\_name        &   &   & x  &   &   &   &   &   &   &   \\ \hline
+
+user\_group\_id    &   &   & x & x & x &  &   &   &  &   \\ \hline
+is\_group\_admin  &   &   &   & x & x &  &   &   &  &   \\ \hline
+
+task\_id                 &   &   &   &   &   & x  & x  & x  & x &   \\ \hline
+task\_name           &   &   &   &  &   &  x  &  &   &   &   \\ \hline
+
+
+user\_group\_task\_id   &   &   &   &   &   & x  &  x &  x & x &   \\ \hline
+points                            &   &   &   &   &   & x  & x  & x  & x  &  \\ \hline
+is\_desi                         &   &   &   &   &   &  x &  x & x  & x  &  \\ \hline
+
+friendship\_id     &   &   &   &   &   &   &   &   &   & x   \\ \hline
+
+
+\end{longtable}
+
+
+
+\section{Section V}
+\subsection{Logical Model of the Enterprise}
+
+\subsubsection{List of Entities and Attributes}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+{\ul \textbf{Entity}} & {\ul \textbf{Attributes}}                                                                                                                              \\ \hline
+user                  & \begin{tabular}[c]{@{}l@{}}user\_id(PK), date\_created, date\_modified, status, username,\\ first\_name, last\_name, password, email\_address\end{tabular} \\ \hline
+group                 & \begin{tabular}[c]{@{}l@{}}group\_id(PK), date\_created, date\_modified,\\ group\_name, group\_members\end{tabular}                             \\ \hline
+task                  & \begin{tabular}[c]{@{}l@{}}task\_id(PK), date\_created, date\_modified, task\_name,\\ group\_id, task\_members, desi(FK), desi\_index\end{tabular}             \\ \hline
+\end{tabular}
+\end{table}
+
+\subsubsection{List of Relationships and Attributes}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+{\ul \textbf{Relationship}} & {\ul \textbf{Attributes}} \\ \hline
+user\_group & user\_group\_id(PK), group\_id(FK), user\_id(FK), is\_group\_admin \\ \hline
+user\_group\_task & \begin{tabular}[c]{@{}l@{}}user\_group\_task\_id(PK), user\_group\_id(FK), task\_id(FK), group\_id(FK),\\ is\_desi, points\end{tabular} \\ \hline
+friendship & friendship\_id(PK), user\_id(FK), friend\_id(FK) \\ \hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Entity-Relationship Diagram of the Enterprise}
+\includegraphics[scale=0.5]{desiERD.jpg}
+
+\subsection{Conceptual Model of the Enterprise}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\multicolumn{2}{|c|}{{\ul \textbf{User}}} \\ \hline
+user\_id & PK, CK \\
+username & CK \\
+password &  \\
+first\_name &  \\
+last\_name &  \\
+email & CK \\
+date\_created &  \\
+date\_modified &  \\
+status & 
+\end{tabular}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\caption{My caption}
+\label{my-label}
+\begin{tabular}{|l|l|}
+\hline
+\multicolumn{2}{|c|}{{\ul \textbf{Group}}} \\ \hline
+group\_id & PK, CK \\
+group\_name &  \\
+group\_members &  \\
+date\_created &  \\
+date\_modified & 
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\multicolumn{2}{|c|}{{\ul \textbf{Task}}} \\ \hline
+task\_id & PK, CK \\
+task\_name &  \\
+task\_members &  \\
+group\_id & FK references group.group\_id \\
+desi & FK references user\_group\_task.user\_group\_task\_id\\
+desi\_index &  \\
+date\_created &  \\
+date\_modified & 
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\multicolumn{2}{|c|}{{\ul \textbf{User\_Group}}} \\ \hline
+user\_group\_id & PK, CK \\
+user\_id & FK references user.user\_id \\
+group\_id & FK references group.group\_id \\
+is\_group\_admin & 
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\multicolumn{2}{|c|}{{\ul \textbf{User\_Group\_Task}}} \\ \hline
+user\_group\_task\_id & PK, CK \\
+user\_group\_id & FK references user\_group.user\_group\_id \\
+group\_id & FK references group.group\_id \\
+task\_id & FK references task.task\_id \\
+is\_desi &  \\
+points & 
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\multicolumn{2}{|c|}{{\ul \textbf{Friendship}}} \\ \hline
+friendship\_id & PK, CK \\
+user\_id & FK references user.user\_id \\
+friend\_id & FK references user.user\_id
+\end{tabular}
+\end{table}
+
+
+\subsection{Table Dictionary}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{{\ul \textbf{Table}}} & {\ul \textbf{Attributes}} & {\ul \textbf{Description}} \\ \hline
+User & \begin{tabular}[c]{@{}l@{}}user\_id, username, first\_name,\\ last\_name, password, date\_created,\\ date\_modified, status\end{tabular} & A user of the application. \\ \hline
+Group & \begin{tabular}[c]{@{}l@{}}group\_id, group\_name, members,\\ date\_created, date\_modified\end{tabular} & A group of users that contains tasks. \\ \hline
+Task & \begin{tabular}[c]{@{}l@{}}task\_id, task\_name, group\_id, \\ task\_members, desi, date\_created,\\ date\_modified\end{tabular} & \begin{tabular}[c]{@{}l@{}}A task to be completed by a given\\ user in a group.\end{tabular} \\ \hline
+User\_Group & \begin{tabular}[c]{@{}l@{}}user\_group\_id, user\_id, group\_id,\\ is\_group\_admin\end{tabular} & Relationship between users and groups. \\ \hline
+User\_Group\_Task & \begin{tabular}[c]{@{}l@{}}user\_group\_task\_id, user\_group\_id, \\ task\_id, group\_id, is\_desi, points\end{tabular} & \begin{tabular}[c]{@{}l@{}}Relationship between usergroups and\\ tasks.\end{tabular} \\ \hline
+Friendship & friendship\_id, user\_id, friend\_id & Relationship between two users. \\ \hline
+\end{tabular}
+\end{table}
+
+\subsection{Attribute Dictionary}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{{\ul \textbf{Attribute}}} & {\ul \textbf{Description}} & {\ul \textbf{Tables Found In}} \\ \hline
+user\_id & Primary key for users & \begin{tabular}[c]{@{}l@{}}User, User\_Group (FK),\\ Friendship (FK)\end{tabular} \\ \hline
+username & Unique identifier of a user & User \\ \hline
+first\_name & The first name of a user. & User \\ \hline
+last\_name & The last name of a user. & User \\ \hline
+password & The password of a user. & User \\ \hline
+email\_address & The email of a user. & User \\ \hline
+group\_id & Primary key for groups. & \begin{tabular}[c]{@{}l@{}}Group, User\_Group (FK),\\ User\_Group\_Task (FK)\end{tabular} \\ \hline
+group\_name & The name of a group. & Group \\ \hline
+group\_members & The members of a group. &  Group\\ \hline
+is\_group\_admin & \begin{tabular}[c]{@{}l@{}}Boolean that says whether a\\ user is a group admin.\end{tabular} & User\_Group \\ \hline
+user\_group\_id & Primary key for a user\_group. & \begin{tabular}[c]{@{}l@{}}User\_Group,\\ User\_Group\_Task (FK)\end{tabular} \\ \hline
+user\_group\_task\_id & \begin{tabular}[c]{@{}l@{}}Primary key for a\\ user\_group\_task.\end{tabular} & User\_Group\_Task \\ \hline
+is\_desi & \begin{tabular}[c]{@{}l@{}}Boolean that say whether a\\ user is the person responsible\\ for completing a given task.\end{tabular} & User\_Group\_Task \\ \hline
+task\_name & The name of a task. & Task \\ \hline
+task\_id & The primary key of a task. & \begin{tabular}[c]{@{}l@{}}Task,\\ User\_Group\_Task (FK)\end{tabular} \\ \hline
+task\_members & The members of a task. & Task \\ \hline
+points & \begin{tabular}[c]{@{}l@{}}Number of points a user has\\ for a given task.\end{tabular} & User\_Group\_Task \\ \hline
+friendship\_id & Primary key of a friendship. & Friendship \\ \hline
+friend\_id & User\_id of a user's friend. & Friendship \\ \hline
+\end{tabular}
+\end{table}
+
+
+\end{document}
